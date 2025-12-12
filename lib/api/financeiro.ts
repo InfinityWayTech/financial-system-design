@@ -5,15 +5,24 @@ import {
   UploadResponse,
   GetParams,
   PacientNamesResponse,
+  ProfissionaisNamesResponse,
 } from "./types/financial";
 
 export const getDashboard = async (): Promise<DashboardData> => {
   const result = await http.get<DashboardData>("/webhook/dashboard");
   return result;
 };
+
 export const getPacients = async (): Promise<PacientNamesResponse> => {
   const result = await http.get<PacientNamesResponse>(
     "/webhook/data-name-pacients"
+  );
+  return result;
+};
+
+export const getProfissionais = async (): Promise<ProfissionaisNamesResponse> => {
+  const result = await http.get<ProfissionaisNamesResponse>(
+    "/webhook/data-name-profissionais"
   );
   return result;
 };
@@ -22,12 +31,14 @@ export const getDados = async (
   mes: string,
   dia: boolean,
   search?: string,
+  profissional?: string
 ): Promise<GetParams[]> => {
   const result = await http.get<GetParams[]>("/webhook/data", {
     params: {
       mes,
       dia,
       ...(search ? { search } : {}),
+      ...(profissional ? { profissional } : {}),
     },
   });
   return result;

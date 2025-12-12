@@ -10,7 +10,8 @@ export const DataFiltersWrapper = ({
   fetchDados: (
     mes: string,
     dia: boolean,
-    search?: string
+    search?: string,
+    profissional?: string
   ) => Promise<GetParams[]>;
 }) => {
   return (

@@ -75,6 +75,7 @@ export type GetParams = {
   mes: string;
   dia: boolean;
   search?: string;
+  profissional?: string;
 };
 
 export type GetAll = {
@@ -89,6 +90,14 @@ export type PacientNameItem = {
 
 export type PacientNamesResponse = {
   names: PacientNameItem[];
+};
+
+export type ProfissionaisNameItem = {
+  profissional: string;
+};
+
+export type ProfissionaisNamesResponse = {
+  names: ProfissionaisNameItem[];
 };
 
 export type UploadResponse = {
