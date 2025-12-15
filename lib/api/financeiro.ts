@@ -6,6 +6,7 @@ import {
   GetParams,
   PacientNamesResponse,
   ProfissionaisNamesResponse,
+  ProductionDataUpdate,
 } from "./types/financial";
 
 export const getDashboard = async (): Promise<DashboardData> => {
@@ -50,10 +51,20 @@ export const uploadDados = async (
   return result;
 };
 
+export const dailyFinancialUpdate = async (
+  data: FinancialDataUpdate[]
+): Promise<FinancialDataUpdate[]> => {
+  const result = await http.put<FinancialDataUpdate[]>(
+    `/webhook/daily-financial-update`,
+    data
+  );
+  return result;
+};
+
 export const dailyProductionUpdate = async (
-  data: FinancialDataUpdate
-): Promise<FinancialDataUpdate> => {
-  const result = await http.put<FinancialDataUpdate>(
+  data: ProductionDataUpdate
+): Promise<ProductionDataUpdate> => {
+  const result = await http.put<ProductionDataUpdate>(
     `/webhook/daily-production-update`,
     data
   );

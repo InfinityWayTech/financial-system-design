@@ -18,13 +18,21 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/combobox/components/combobox";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { usePacients } from "@/app/upload/_hooks/usePacients";
 import { getMaquinetaBadgeVariant } from "@/app/upload/_utils/varient";
 import { MachineData } from "@/lib/api/types/financial";
+import { usePrint } from "../_hooks/usePrint";
+import { Printer } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useExportToExcel } from "../_hooks/useExportToExcel";
 
 export const MachineTable = ({
   data,
@@ -42,13 +50,68 @@ export const MachineTable = ({
 
   const { data: PacientsNames, handleSubmit, isLoading } = usePacients();
 
+  const { componentRef, handlePrint } = usePrint();
+  const { exportToCsv } = useExportToExcel<MachineData>();
+
+  const machineColumns = [
+    {
+      header: "Data",
+      accessor: (row: MachineData) => row.data_atendimento,
+      formatter: (value: string) => formatDate(value),
+    },
+    {
+      header: "Paciente",
+      accessor: (row: MachineData) => row.pacienteName || "",
+    },
+    {
+      header: "Maquineta",
+      accessor: (row: MachineData) => row.card_machine || "",
+    },
+    {
+      header: "Autorizacao",
+      accessor: (row: MachineData) => row.authorization || "",
+    },
+    { header: "Parcelas", accessor: (row: MachineData) => row.parcelas || "" },
+  ];
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Registros dos Cartões Diários</CardTitle>
-        <CardDescription>Mostrando {data.length} registros</CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>Registros dos Cartões Diários</CardTitle>
+          <CardDescription>Mostrando {data.length} registros</CardDescription>
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Printer className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={handlePrint}>Imprimir</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                exportToCsv(
+                  data,
+                  machineColumns.map((col) => ({
+                    ...col,
+                    formatter:
+                      col.formatter &&
+                      ((value: string | number | boolean | null | undefined) =>
+                        col.formatter!(value as string)),
+                  })),
+                  "registros_maquineta"
+                )
+              }
+            >
+              CV/Excel
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
-      <CardContent>
+      <CardContent ref={componentRef}>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -57,6 +120,7 @@ export const MachineTable = ({
                 <TableHead>Paciente</TableHead>
                 <TableHead>Maquineta</TableHead>
                 <TableHead>Autorização</TableHead>
+                <TableHead>Parcelas</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -76,29 +140,25 @@ export const MachineTable = ({
                       {formatDate(row.data_atendimento)}
                     </TableCell>
                     <TableCell>
-                      {row.pacienteName ? (
-                        <Input value={row.pacienteName} disabled />
-                      ) : (
-                        <Combobox
-                          value={selectedPatients[row.id] || ""}
-                          onValueChange={(value) => {
-                            const name = Array.isArray(value)
-                              ? value[0]
-                              : value;
-                            setSelectedPatients((prev) => ({
-                              ...prev,
-                              [row.id]: name || "",
-                            }));
-                          }}
-                          options={
-                            (PacientsNames?.names || []).map((p) => ({
-                              value: p.paciente,
-                              label: p.paciente,
-                            })) || []
-                          }
-                          placeholder="Selecione um paciente..."
-                        />
-                      )}
+                      <Combobox
+                        value={
+                          selectedPatients[row.id] || row.pacienteName || ""
+                        }
+                        onValueChange={(value) => {
+                          const name = Array.isArray(value) ? value[0] : value;
+                          setSelectedPatients((prev) => ({
+                            ...prev,
+                            [row.id]: name || "",
+                          }));
+                        }}
+                        options={
+                          (PacientsNames?.names || []).map((p) => ({
+                            value: p.paciente,
+                            label: p.paciente,
+                          })) || []
+                        }
+                        placeholder="Selecione um paciente..."
+                      />
                     </TableCell>
                     <TableCell>
                       <Badge
@@ -108,6 +168,7 @@ export const MachineTable = ({
                       </Badge>
                     </TableCell>
                     <TableCell>{row.authorization || "-"}</TableCell>
+                    <TableCell>{row.parcelas || "-"}</TableCell>
                   </TableRow>
                 ))
               )}

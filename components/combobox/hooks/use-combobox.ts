@@ -70,7 +70,7 @@ export function useCombobox({
 
   const filteredOptions = React.useMemo(() => {
     return options.filter((option) =>
-      option.label.toLowerCase().includes(searchValue.toLowerCase())
+      option.label?.toLowerCase().includes(searchValue.toLowerCase())
     );
   }, [options, searchValue]);
 

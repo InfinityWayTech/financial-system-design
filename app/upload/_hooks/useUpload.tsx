@@ -18,6 +18,8 @@ export const useUpload = () => {
     mittuMedca: File | null;
     mittuCatarina: File | null;
     mittuCatarinaLink: File | null;
+    mittuInfinityMedcosLink: File | null;
+    mittuMedcaLink: File | null;
   }) => {
     const formData = new FormData();
     if (files.diaProducao) formData.append("dia-producao", files.diaProducao);
@@ -28,6 +30,10 @@ export const useUpload = () => {
       formData.append("mittu-catarina", files.mittuCatarina);
     if (files.mittuCatarinaLink)
       formData.append("mittu-catarina-link", files.mittuCatarinaLink);
+    if (files.mittuInfinityMedcosLink)
+      formData.append("mittu-infinity-medcos-link", files.mittuInfinityMedcosLink);
+    if (files.mittuMedcaLink)
+      formData.append("mittu-medca-link", files.mittuMedcaLink);
     await uploadData(formData);
   };
 

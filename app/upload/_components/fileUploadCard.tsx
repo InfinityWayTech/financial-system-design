@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Upload, FileSpreadsheet, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 
 interface FileUploadCardProps<T extends string> {
   title: string;
@@ -22,6 +23,7 @@ export const FileUploadCard = <T extends string>({
   file,
   handleFileChange,
 }: FileUploadCardProps<T>) => {
+  const [isDragging, setIsDragging] = useState(false);
   const getAcceptTypes = (type: string) => {
     if (type === "diaProducao") {
       return ".csv,.xlsx,.xls";
@@ -42,11 +44,20 @@ export const FileUploadCard = <T extends string>({
       </CardHeader>
       <CardContent>
         <div
-          className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-            file
-              ? "border-green-500 bg-green-50"
-              : "border-muted hover:border-primary/50"
-          }`}
+          className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${file ? "border-green-500 bg-green-50" : "border-muted hover:border-primary/50"} ${isDragging ? "border-primary bg-primary/10" : ""}`}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragging(false);
+            const droppedFile = e.dataTransfer.files?.[0];
+            if (droppedFile) {
+              handleFileChange(fileType, droppedFile);
+            }
+          }}
         >
           <input
             type="file"

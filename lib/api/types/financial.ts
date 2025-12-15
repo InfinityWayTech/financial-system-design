@@ -48,6 +48,7 @@ export type MachineData = {
   card_machine: string;
   pacienteName: string;
   data_atendimento: string;
+  parcelas: string;
 };
 
 export type FinancialData = {
@@ -106,7 +107,13 @@ export type UploadResponse = {
 
 export type FinancialDataUpdate = {
   id?: number;
-  nutri: boolean;
+  obs: string;
+  pendente: boolean;
+};
+
+export type ProductionDataUpdate = {
+  id?: number;
+  nutri?: boolean;
   obs: string;
   pendencia: boolean;
 };

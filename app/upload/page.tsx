@@ -16,12 +16,16 @@ const UploadPage = () => {
     mittuMedca: File | null;
     mittuCatarina: File | null;
     mittuCatarinaLink: File | null;
+    mittuInfinityMedcosLink: File | null;
+    mittuMedcaLink: File | null;
   }>({
     diaProducao: null,
     mittuInfinityMedcos: null,
     mittuMedca: null,
     mittuCatarina: null,
     mittuCatarinaLink: null,
+    mittuInfinityMedcosLink: null,
+    mittuMedcaLink: null,
   });
 
   const handleFileChange = (
@@ -73,13 +77,26 @@ const UploadPage = () => {
             file={files.mittuCatarinaLink}
             handleFileChange={handleFileChange}
           />
+          <FileUploadCard
+            title="Mittu Infinity Medcos Link"
+            description="Arquivo CSV ou Excel da Mittu Infinity Medcos Link."
+            fileType="mittuInfinityMedcosLink"
+            file={files.mittuInfinityMedcosLink}
+            handleFileChange={handleFileChange}
+          />
+          <FileUploadCard
+            title="Mittu Medca Link"
+            description="Arquivo CSV ou Excel da Mittu Medca Link."
+            fileType="mittuMedcaLink"
+            file={files.mittuMedcaLink}
+            handleFileChange={handleFileChange}
+          />
         </div>
         <div className="mt-6 flex justify-center">
           <Button onClick={() => handleSubmit(files)} disabled={isLoading}>
             {isLoading ? "Enviando..." : "Enviar Arquivos"}
           </Button>
         </div>
-        {/* <UploadTab data={machineData} /> */}
       </div>
     </Suspense>
   );
