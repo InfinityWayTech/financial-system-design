@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Procedimento {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  dataAtendimento String
+  paciente        String
+  profissional    String
+  formaPagamento  String
+  valor           Decimal @db.Numeric(10, 2)
+  tipo            String
+  comissao        Decimal @db.Numeric(10, 2) @default(0)
+
+  @@index([paciente])
+  @@index([profissional])
+  @@index([dataAtendimento])
+}
+
+model Paciente {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  nome               String
+  totalProcedimentos Decimal @db.Numeric(10, 2)
+  totalGeral         Decimal @db.Numeric(10, 2)
+  totalComissao      Decimal @db.Numeric(10, 2)
+  status             String  // "OK" ou "DIVERGENTE"
+  diferenca          Decimal @db.Numeric(10, 2) @default(0)
+
+  @@unique([nome, createdAt])
+  @@index([nome])
+  @@index([status])
+}
+
+model Resumo {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  totalPacientes       Int
+  pacientesOk          Int
+  pacientesDivergentes Int
+  somaComissoes        Decimal @db.Numeric(12, 2)
+  somaDivergencias     Decimal @db.Numeric(12, 2)
+
+  @@index([createdAt])
+}

@@ -1,0 +1,37 @@
+import { NextRequest, NextResponse } from "next/server";
+import { processarDadosService } from "./services/index.service";
+
+export async function POST(request: NextRequest) {
+  try {
+    const formData = await request.formData();
+
+    const arquivoSistema = formData.get("baseSister") as File;
+    const arquivoFinanceira = formData.get("baseFinance") as File;
+
+    if (!arquivoSistema || !arquivoFinanceira) {
+      return NextResponse.json(
+        {
+          error: "Ambos os arquivos são obrigatórios",
+        },
+        { status: 400 }
+      );
+    }
+
+    const resultado = await processarDadosService({
+      baseSister: arquivoSistema,
+      baseFinance: arquivoFinanceira,
+    }, false);
+
+    return NextResponse.json({
+      sucesso: true,
+      dados: resultado,
+    });
+  } catch (erro) {
+    console.error("Erro ao processar dados:", erro);
+    return NextResponse.json(
+      { error: "Erro ao processar dados" },
+      { status: 500 }
+    );
+  }
+}
+

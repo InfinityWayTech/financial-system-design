@@ -1,9 +1,9 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
-import { MainNav } from "@/components/main-nav";
 import { Toaster } from "@/components/ui/sonner";
+import Header from "@/components/header";
 
 export const metadata: Metadata = {
   title: "Sistema Financeiro - Gestão Clínica",
@@ -35,11 +35,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={`font-sans antialiased`} suppressHydrationWarning>
-        <div className="min-h-screen bg-background">
-          <MainNav />
-          <main className="container mx-auto py-8 px-4">{children}</main>
-        </div>
+      <body className={`font-sans antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          {children}
+        </ThemeProvider>
         <Toaster position="top-center" richColors={true} />
       </body>
     </html>

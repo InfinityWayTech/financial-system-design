@@ -1,5 +1,4 @@
-import { API_CONFIG } from '@/lib/config/api';
-
+import { API_CONFIG } from "@/lib/config/api";
 
 interface CustomRequestInit extends RequestInit {
   params?: Record<string, any>;
@@ -19,7 +18,7 @@ const http = {
     }
 
     const response = await fetch(requestUrl, {
-      method: 'GET',
+      method: "GET",
       ...options,
       headers,
     });
@@ -40,8 +39,13 @@ const http = {
     return response.json() as Promise<T>;
   },
 
-  post: async <T>(url: string, data: any, options?: RequestInit): Promise<T> => {
-    const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
+  post: async <T>(
+    url: string,
+    data: any,
+    options?: RequestInit
+  ): Promise<T> => {
+    const isFormData =
+      typeof FormData !== "undefined" && data instanceof FormData;
 
     const headers: Record<string, string> = {
       ...API_CONFIG.DEFAULT_HEADERS,
@@ -49,11 +53,11 @@ const http = {
     };
 
     if (isFormData) {
-      delete headers['Content-Type'];
+      delete headers["Content-Type"];
     }
 
     const response = await fetch(API_CONFIG.BASE_URL + url, {
-      method: 'POST',
+      method: "POST",
       ...options,
       headers,
       body: isFormData ? data : JSON.stringify(data),
@@ -61,8 +65,8 @@ const http = {
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
       try {
-        const contentType = response.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
           const errorData = await response.json();
           if (errorData && errorData.message) {
             errorMessage = errorData.message;
@@ -78,7 +82,7 @@ const http = {
       throw new Error(errorMessage);
     }
 
-    const contentType = response.headers.get('content-type') || '';
+    const contentType = response.headers.get("content-type") || "";
     if (response.status === 204 || response.status === 205) {
       return undefined as unknown as T;
     }
@@ -86,7 +90,7 @@ const http = {
     if (!rawText || rawText.trim().length === 0) {
       return undefined as unknown as T;
     }
-    if (contentType.includes('application/json')) {
+    if (contentType.includes("application/json")) {
       try {
         return JSON.parse(rawText) as T;
       } catch {
@@ -103,7 +107,7 @@ const http = {
     };
 
     const response = await fetch(API_CONFIG.BASE_URL + url, {
-      method: 'PUT',
+      method: "PUT",
       ...options,
       headers,
       body: JSON.stringify(data),
@@ -125,14 +129,18 @@ const http = {
     return response.json() as Promise<T>;
   },
 
-  patch: async <T>(url: string, data: any, options?: RequestInit): Promise<T> => {
+  patch: async <T>(
+    url: string,
+    data: any,
+    options?: RequestInit
+  ): Promise<T> => {
     const headers = {
       ...API_CONFIG.DEFAULT_HEADERS,
       ...options?.headers,
     };
 
     const response = await fetch(API_CONFIG.BASE_URL + url, {
-      method: 'PATCH',
+      method: "PATCH",
       ...options,
       headers,
       body: JSON.stringify(data),
@@ -161,7 +169,7 @@ const http = {
     };
 
     const response = await fetch(API_CONFIG.BASE_URL + url, {
-      method: 'DELETE',
+      method: "DELETE",
       ...options,
       headers,
     });

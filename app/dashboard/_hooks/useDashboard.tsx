@@ -1,5 +1,5 @@
 import { useFetch } from "@/hooks/useFetch";
-import { getDashboard } from "@/lib/api/financeiro";
+// import { getDashboard } from "@/lib/api/financeiro";
 
 const DEFAULT_DASHBOARD_ARGS: unknown[] = [];
 

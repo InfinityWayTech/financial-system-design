@@ -25,7 +25,10 @@ export const FileUploadCard = <T extends string>({
 }: FileUploadCardProps<T>) => {
   const [isDragging, setIsDragging] = useState(false);
   const getAcceptTypes = (type: string) => {
-    if (type === "diaProducao") {
+    if (type === "baseFinance") {
+      return ".csv,.xlsx,.xls";
+    }
+    if (type === "baseSister") {
       return ".csv,.xlsx,.xls";
     }
     return ".csv,.xlsx,.xls";
@@ -44,7 +47,11 @@ export const FileUploadCard = <T extends string>({
       </CardHeader>
       <CardContent>
         <div
-          className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${file ? "border-green-500 bg-green-50" : "border-muted hover:border-primary/50"} ${isDragging ? "border-primary bg-primary/10" : ""}`}
+          className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
+            file
+              ? "border-primary bg-primary/10"
+              : "border-muted hover:border-primary/50"
+          } ${isDragging ? "border-primary bg-primary/10" : ""}`}
           onDragOver={(e) => {
             e.preventDefault();
             setIsDragging(true);
@@ -71,18 +78,18 @@ export const FileUploadCard = <T extends string>({
           <label htmlFor={`upload-${fileType}`} className="cursor-pointer">
             {file ? (
               <div className="flex flex-col items-center gap-2">
-                <CheckCircle2 className="h-10 w-10 text-green-600" />
-                <p className="text-sm font-medium text-green-700">
+                <CheckCircle2 className="h-10 w-10 text-primary" />
+                <p className="text-sm font-medium text-primary-foreground">
                   {file.name}
                 </p>
-                <p className="text-xs text-green-600">Clique para alterar</p>
+                <p className="text-xs text-primary">Clique para alterar</p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-2">
                 <Upload className="h-10 w-10 text-muted-foreground" />
                 <p className="text-sm font-medium">Clique para selecionar</p>
                 <p className="text-xs text-muted-foreground">
-                  {fileType === "CSV ou Excel"}
+                  {fileType === "baseFinance" ? "CSV ou Excel" : "CSV ou Excel"}
                 </p>
               </div>
             )}

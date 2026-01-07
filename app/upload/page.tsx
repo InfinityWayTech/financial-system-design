@@ -4,28 +4,16 @@ import { Suspense, useState } from "react";
 import { FileUploadCard } from "./_components/fileUploadCard";
 import { Button } from "@/components/ui/button";
 import { useUpload } from "./_hooks/useUpload";
-import UploadTab from "./_components/uploadTab";
 
 const UploadPage = () => {
-  const { handleSubmit, data, isLoading } = useUpload();
-  const machineData = Array.isArray(data) ? data.map((item) => item.data) : [];
+  const { handleSubmit, isLoading } = useUpload();
 
   const [files, setFiles] = useState<{
-    diaProducao: File | null;
-    mittuInfinityMedcos: File | null;
-    mittuMedca: File | null;
-    mittuCatarina: File | null;
-    mittuCatarinaLink: File | null;
-    mittuInfinityMedcosLink: File | null;
-    mittuMedcaLink: File | null;
+    baseFinance: File | null;
+    baseSister: File | null;
   }>({
-    diaProducao: null,
-    mittuInfinityMedcos: null,
-    mittuMedca: null,
-    mittuCatarina: null,
-    mittuCatarinaLink: null,
-    mittuInfinityMedcosLink: null,
-    mittuMedcaLink: null,
+    baseFinance: null,
+    baseSister: null,
   });
 
   const handleFileChange = (
@@ -37,58 +25,23 @@ const UploadPage = () => {
 
   return (
     <Suspense fallback={<div>Carregando...</div>}>
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 transition-colors text-center">
         <h1 className="text-3xl font-bold mb-6">
           Upload de Arquivos Financeiros
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <FileUploadCard
-            title="Dia de Produção"
-            description="Arquivo CSV ou Excel contendo os dados de produção diária."
-            fileType="diaProducao"
-            file={files.diaProducao}
+            title="Base Financeira"
+            description="Arquivo CSV ou Excel contendo os dados financeiros básicos."
+            fileType="baseFinance"
+            file={files.baseFinance}
             handleFileChange={handleFileChange}
           />
           <FileUploadCard
-            title="Mittu Infinity Medcos"
-            description="Arquivo CSV ou Excel da Mittu Infinity Medcos."
-            fileType="mittuInfinityMedcos"
-            file={files.mittuInfinityMedcos}
-            handleFileChange={handleFileChange}
-          />
-          <FileUploadCard
-            title="Mittu Medca"
-            description="Arquivo CSV ou Excel da Mittu Medca."
-            fileType="mittuMedca"
-            file={files.mittuMedca}
-            handleFileChange={handleFileChange}
-          />
-          <FileUploadCard
-            title="Mittu Catarina"
-            description="Arquivo CSV ou Excel da Mittu Catarina."
-            fileType="mittuCatarina"
-            file={files.mittuCatarina}
-            handleFileChange={handleFileChange}
-          />
-          <FileUploadCard
-            title="Mittu Catarina Link"
-            description="Arquivo CSV ou Excel da Mittu Catarina Link."
-            fileType="mittuCatarinaLink"
-            file={files.mittuCatarinaLink}
-            handleFileChange={handleFileChange}
-          />
-          <FileUploadCard
-            title="Mittu Infinity Medcos Link"
-            description="Arquivo CSV ou Excel da Mittu Infinity Medcos Link."
-            fileType="mittuInfinityMedcosLink"
-            file={files.mittuInfinityMedcosLink}
-            handleFileChange={handleFileChange}
-          />
-          <FileUploadCard
-            title="Mittu Medca Link"
-            description="Arquivo CSV ou Excel da Mittu Medca Link."
-            fileType="mittuMedcaLink"
-            file={files.mittuMedcaLink}
+            title="Base Sistema"
+            description="Arquivo CSV ou Excel contendo os dados financeiros básicos."
+            fileType="baseSister"
+            file={files.baseSister}
             handleFileChange={handleFileChange}
           />
         </div>
