@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { processarDadosService } from "./services/index.service";
+import {
+  getSummaryService,
+  processarDadosService,
+} from "./services/index.service";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,10 +20,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const resultado = await processarDadosService({
-      baseSister: arquivoSistema,
-      baseFinance: arquivoFinanceira,
-    }, false);
+    const resultado = await processarDadosService(
+      {
+        baseSister: arquivoSistema,
+        baseFinance: arquivoFinanceira,
+      },
+      false
+    );
 
     return NextResponse.json({
       sucesso: true,
@@ -35,3 +41,21 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function GET(request: NextRequest) {
+  try {
+    const month = Number(request.nextUrl.searchParams.get("month"));
+    const year = Number(request.nextUrl.searchParams.get("year"));
+    
+    const summary = await getSummaryService(month, year);
+    return NextResponse.json({
+      sucesso: true,
+      dados: summary,
+    });
+  } catch (erro) {
+    console.error("Erro ao trazer o resumo:", erro);
+    return NextResponse.json(
+      { error: "Erro ao trazer o resumo" },
+      { status: 500 }
+    );
+  }
+}

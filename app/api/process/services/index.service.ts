@@ -1,3 +1,5 @@
+"use server";
+
 import {
   DadosResultado,
   FinanceiroExcel,
@@ -12,12 +14,13 @@ import {
   mesclarComFinanceira,
   agruparPorStatus,
   calcularComissoes,
-} from "./logic.service";
+} from "./molecules/logic.service";
 import {
   salvarPacientes,
   salvarProcedimentos,
   salvarResumo,
-} from "./database.service";
+} from "./molecules/database.service";
+import { prisma } from "@/lib/prisma";
 
 function normalizarBaseSistema(
   dados: Record<string, unknown>[]
@@ -101,4 +104,67 @@ export async function processarDadosService(
     console.error("Erro no serviço de dados:", erro);
     throw erro;
   }
+}
+
+export async function getSummaryService(
+  month: number,
+  year: number
+): Promise<{
+  totalComissao: number;
+  totalPacientes: number;
+  totalProcedimentos: number;
+  ticketMedio: number;
+  taxaConformidade: number;
+}> {
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 1);
+
+  const summaries = await prisma.resumo.findMany({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lt: endDate,
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  if (summaries.length === 0) {
+    return {
+      totalComissao: 0,
+      totalPacientes: 0,
+      totalProcedimentos: 0,
+      ticketMedio: 0,
+      taxaConformidade: 0,
+    };
+  }
+
+  let aggregatedTotalComissao = 0;
+  let aggregatedTotalPacientes = 0;
+  let aggregatedPacientesOk = 0;
+
+  for (const s of summaries) {
+    aggregatedTotalComissao += s.somaComissoes?.toNumber() || 0;
+    aggregatedTotalPacientes += s.totalPacientes || 0;
+    aggregatedPacientesOk += s.pacientesOk || 0;
+  }
+
+  const totalComissao = aggregatedTotalComissao;
+  const totalPacientes = aggregatedTotalPacientes;
+  const totalProcedimentos = aggregatedPacientesOk;
+
+  const ticketMedio =
+    totalProcedimentos > 0 ? totalComissao / totalProcedimentos : 0;
+  const taxaConformidade =
+    totalPacientes > 0 ? (totalProcedimentos / totalPacientes) * 100 : 0;
+
+  return {
+    totalComissao,
+    totalPacientes,
+    totalProcedimentos,
+    ticketMedio,
+    taxaConformidade,
+  };
 }

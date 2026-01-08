@@ -1,18 +1,20 @@
 import { useFetch } from "@/hooks/useFetch";
-// import { getDashboard } from "@/lib/api/financeiro";
+import { getSummary } from "@/lib/api/financeiro";
+import { useMemo } from "react";
 
-const DEFAULT_DASHBOARD_ARGS: unknown[] = [];
+export const useDashboard = (month: number, year: number) => {
+  const fetchOptions = useMemo(() => ({
+    errorMessage: "Erro ao trazer os dados!",
+    auto: true,
+    defaultArgs: [month, year],
+  }), [month, year]);
 
-export const useDashboard = () => {
   const {
     execute: fetchDashboard,
     data,
     isLoading,
     error,
-  } = useFetch(getDashboard, {
-    errorMessage: "Erro ao trazer os dados!",
-    auto: true,
-    defaultArgs: DEFAULT_DASHBOARD_ARGS,});
+  } = useFetch(getSummary, fetchOptions);
 
   return {
     fetchDashboard,

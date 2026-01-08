@@ -1,11 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import {
   DadosResultado,
   PacienteComComissao,
   PacienteComStatus,
-} from "../types";
-
-const prisma = new PrismaClient();
+} from "../../types";
 
 export async function salvarProcedimentos(pacientes: PacienteComComissao[]) {
   try {

@@ -18,7 +18,7 @@ const DashboardPage = () => {
   return (
     <Suspense fallback={<div>Carregando...</div>}>
       <div className="min-h-screen transition-colors container mx-auto px-4 py-6 space-y-6">
-        <SummaryCards data={data} />
+        <SummaryCards month={12} year={2023} />
 
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-5 h-auto gap-2">

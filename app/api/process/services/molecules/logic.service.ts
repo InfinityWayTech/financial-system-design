@@ -1,5 +1,4 @@
-// services/logic.service.ts
-import { REGRAS_COMISSAO } from "../utils";
+import { REGRAS_COMISSAO } from "../../utils";
 import {
   FinanceiroExcel,
   Procedimento,
@@ -7,7 +6,7 @@ import {
   PacienteMergeado,
   PacienteComStatus,
   PacienteComComissao,
-} from "../types";
+} from "../../types";
 
 export function converterData(data: string): string {
   if (!data || !data.includes("/")) return data;
