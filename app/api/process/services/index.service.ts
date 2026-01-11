@@ -14,11 +14,11 @@ import {
   mesclarComFinanceira,
   agruparPorStatus,
   calcularComissoes,
+  verificarSeJaEstarNoBanco,
 } from "./molecules/logic.service";
 import {
   salvarPacientes,
   salvarProcedimentos,
-  salvarResumo,
 } from "./molecules/database.service";
 import { prisma } from "@/lib/prisma";
 
@@ -45,26 +45,27 @@ function normalizarBaseFinanceira(
 }
 
 export async function processarDadosService(
-  payload: ProcessarPayload,
-  salvarNoBanco: boolean = true
+  payload: ProcessarPayload
 ): Promise<DadosResultado> {
   try {
-    const workbookSistema = XLSX.read(await payload.baseSister?.arrayBuffer(), {
-      type: "buffer",
-    }).Sheets["BASE SISTEMA"];
+    const sistemaWorkbook = XLSX.read(await payload.baseSister?.arrayBuffer(), { type: "buffer" });
+    const primeiraSistema = sistemaWorkbook.Sheets[sistemaWorkbook.SheetNames[0]];
 
-    const workbookFinanceira = XLSX.read(
-      await payload.baseFinance?.arrayBuffer(),
-      { type: "buffer" }
-    );
+    const financeiroWorkbook = XLSX.read(await payload.baseFinance?.arrayBuffer(), { type: "buffer" });
+    const primeiraFinanceira = financeiroWorkbook.Sheets[financeiroWorkbook.SheetNames[0]];
 
     const baseSistema = normalizarBaseSistema(
-      XLSX.utils.sheet_to_json(workbookSistema)
+      XLSX.utils.sheet_to_json(primeiraSistema)
+    );
+    
+    const baseFinanceira = normalizarBaseFinanceira(
+      XLSX.utils.sheet_to_json(primeiraFinanceira)
     );
 
-    const baseFinanceira = normalizarBaseFinanceira(
-      XLSX.utils.sheet_to_json(workbookFinanceira)
-    );
+    const jaExisteNoBanco = await verificarSeJaEstarNoBanco(unificarPorPaciente(baseSistema));
+    if (jaExisteNoBanco) {
+      throw new Error("Dados já existem no banco de dados.");
+    }
 
     const unificado = unificarPorPaciente(baseSistema);
     const mergeado = mesclarComFinanceira(unificado, baseFinanceira);
@@ -90,16 +91,16 @@ export async function processarDadosService(
       },
     };
 
-    if (salvarNoBanco) {
+    try {
       await Promise.all([
         salvarProcedimentos(comComissoes),
         salvarPacientes(comComissoes, divergentes),
-        salvarResumo(resultado.resumo),
       ]);
-      console.log("✓ Todos os dados salvos com sucesso!");
+      return resultado;
+    } catch (erro) {
+      console.error("Erro ao salvar no banco:", erro);
+      throw new Error("Falha ao salvar os dados no banco.");
     }
-
-    return resultado;
   } catch (erro) {
     console.error("Erro no serviço de dados:", erro);
     throw erro;
@@ -119,7 +120,7 @@ export async function getSummaryService(
   const startDate = new Date(year, month - 1, 1);
   const endDate = new Date(year, month, 1);
 
-  const summaries = await prisma.resumo.findMany({
+  const procedimentos = await prisma.paciente.findMany({
     where: {
       createdAt: {
         gte: startDate,
@@ -131,34 +132,11 @@ export async function getSummaryService(
     },
   });
 
-  if (summaries.length === 0) {
-    return {
-      totalComissao: 0,
-      totalPacientes: 0,
-      totalProcedimentos: 0,
-      ticketMedio: 0,
-      taxaConformidade: 0,
-    };
-  }
-
-  let aggregatedTotalComissao = 0;
-  let aggregatedTotalPacientes = 0;
-  let aggregatedPacientesOk = 0;
-
-  for (const s of summaries) {
-    aggregatedTotalComissao += s.somaComissoes?.toNumber() || 0;
-    aggregatedTotalPacientes += s.totalPacientes || 0;
-    aggregatedPacientesOk += s.pacientesOk || 0;
-  }
-
-  const totalComissao = aggregatedTotalComissao;
-  const totalPacientes = aggregatedTotalPacientes;
-  const totalProcedimentos = aggregatedPacientesOk;
-
-  const ticketMedio =
-    totalProcedimentos > 0 ? totalComissao / totalProcedimentos : 0;
-  const taxaConformidade =
-    totalPacientes > 0 ? (totalProcedimentos / totalPacientes) * 100 : 0;
+  const totalProcedimentos = procedimentos.reduce((acc, s) => acc + (s.totalProcedimentos?.toNumber() || 0), 0);
+  const totalComissao = procedimentos.reduce((acc, s) => acc + (s.totalComissao?.toNumber() || 0), 0);
+  const totalPacientes = procedimentos.length;
+  const ticketMedio = totalProcedimentos > 0 ? totalComissao / totalProcedimentos : 0;
+  const taxaConformidade = totalPacientes > 0 ? (procedimentos.filter(p => p.status === "OK").length / totalPacientes) * 100 : 0;
 
   return {
     totalComissao,

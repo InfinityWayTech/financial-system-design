@@ -108,22 +108,13 @@ exports.Prisma.PacienteScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  dataAtendimento: 'dataAtendimento',
   nome: 'nome',
   totalProcedimentos: 'totalProcedimentos',
   totalGeral: 'totalGeral',
   totalComissao: 'totalComissao',
   status: 'status',
   diferenca: 'diferenca'
-};
-
-exports.Prisma.ResumoScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  totalPacientes: 'totalPacientes',
-  pacientesOk: 'pacientesOk',
-  pacientesDivergentes: 'pacientesDivergentes',
-  somaComissoes: 'somaComissoes',
-  somaDivergencias: 'somaDivergencias'
 };
 
 exports.Prisma.SortOrder = {
@@ -139,8 +130,7 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   Procedimento: 'Procedimento',
-  Paciente: 'Paciente',
-  Resumo: 'Resumo'
+  Paciente: 'Paciente'
 };
 /**
  * Create the Client
@@ -150,10 +140,10 @@ const config = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Procedimento {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n\n  dataAtendimento String\n  paciente        String\n  profissional    String\n  formaPagamento  String\n  valor           Decimal\n  tipo            String\n  comissao        Decimal @default(0)\n\n  @@index([paciente])\n  @@index([profissional])\n  @@index([dataAtendimento])\n}\n\nmodel Paciente {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  nome               String\n  totalProcedimentos Decimal\n  totalGeral         Decimal\n  totalComissao      Decimal\n  status             String\n  diferenca          Decimal @default(0)\n\n  @@unique([nome, createdAt])\n  @@index([nome])\n  @@index([status])\n}\n\nmodel Resumo {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n\n  totalPacientes       Int\n  pacientesOk          Int\n  pacientesDivergentes Int\n  somaComissoes        Decimal\n  somaDivergencias     Decimal\n\n  @@index([createdAt])\n}\n"
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Procedimento {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n\n  dataAtendimento String\n  paciente        String\n  profissional    String\n  formaPagamento  String\n  valor           Decimal\n  tipo            String\n  comissao        Decimal @default(0)\n\n  @@index([paciente])\n  @@index([profissional])\n  @@index([dataAtendimento])\n}\n\nmodel Paciente {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  dataAtendimento    String\n  nome               String\n  totalProcedimentos Decimal\n  totalGeral         Decimal\n  totalComissao      Decimal\n  status             String\n  diferenca          Decimal @default(0)\n\n  @@unique([nome, createdAt])\n  @@index([nome])\n  @@index([status])\n  @@index([dataAtendimento])\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Procedimento\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dataAtendimento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"paciente\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profissional\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"formaPagamento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"valor\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"tipo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"comissao\",\"kind\":\"scalar\",\"type\":\"Decimal\"}],\"dbName\":null},\"Paciente\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"totalProcedimentos\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"totalGeral\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"totalComissao\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"diferenca\",\"kind\":\"scalar\",\"type\":\"Decimal\"}],\"dbName\":null},\"Resumo\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"totalPacientes\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"pacientesOk\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"pacientesDivergentes\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"somaComissoes\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"somaDivergencias\",\"kind\":\"scalar\",\"type\":\"Decimal\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Procedimento\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dataAtendimento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"paciente\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profissional\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"formaPagamento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"valor\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"tipo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"comissao\",\"kind\":\"scalar\",\"type\":\"Decimal\"}],\"dbName\":null},\"Paciente\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dataAtendimento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"totalProcedimentos\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"totalGeral\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"totalComissao\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"diferenca\",\"kind\":\"scalar\",\"type\":\"Decimal\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
   getRuntime: async () => require('./query_compiler_bg.js'),

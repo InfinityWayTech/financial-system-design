@@ -22,20 +22,23 @@ const http = {
       ...options,
       headers,
     });
+    
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
       try {
-        const errorData = await response.json();
-        if (errorData && errorData.message) {
-          errorMessage = errorData.message;
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          const errorData = await response.json();
+          errorMessage = errorData?.message || JSON.stringify(errorData);
         } else {
           errorMessage = await response.text();
         }
       } catch (e) {
-        errorMessage = await response.text();
+        errorMessage = `HTTP error! status: ${response.status}`;
       }
       throw new Error(errorMessage);
     }
+    
     return response.json() as Promise<T>;
   },
 
@@ -62,34 +65,34 @@ const http = {
       headers,
       body: isFormData ? data : JSON.stringify(data),
     });
+    
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
       try {
         const contentType = response.headers.get("content-type") || "";
         if (contentType.includes("application/json")) {
           const errorData = await response.json();
-          if (errorData && errorData.message) {
-            errorMessage = errorData.message;
-          } else {
-            errorMessage = await response.text();
-          }
+          errorMessage = errorData?.message || JSON.stringify(errorData);
         } else {
           errorMessage = await response.text();
         }
       } catch (e) {
-        errorMessage = await response.text();
+        errorMessage = `HTTP error! status: ${response.status}`;
       }
       throw new Error(errorMessage);
     }
 
     const contentType = response.headers.get("content-type") || "";
+    
     if (response.status === 204 || response.status === 205) {
       return undefined as unknown as T;
     }
+    
     const rawText = await response.text();
     if (!rawText || rawText.trim().length === 0) {
       return undefined as unknown as T;
     }
+    
     if (contentType.includes("application/json")) {
       try {
         return JSON.parse(rawText) as T;
@@ -97,6 +100,7 @@ const http = {
         return undefined as unknown as T;
       }
     }
+    
     return rawText as unknown as T;
   },
 
@@ -112,20 +116,23 @@ const http = {
       headers,
       body: JSON.stringify(data),
     });
+    
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
       try {
-        const errorData = await response.json();
-        if (errorData && errorData.message) {
-          errorMessage = errorData.message;
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          const errorData = await response.json();
+          errorMessage = errorData?.message || JSON.stringify(errorData);
         } else {
           errorMessage = await response.text();
         }
       } catch (e) {
-        errorMessage = await response.text();
+        errorMessage = `HTTP error! status: ${response.status}`;
       }
       throw new Error(errorMessage);
     }
+    
     return response.json() as Promise<T>;
   },
 
@@ -145,20 +152,23 @@ const http = {
       headers,
       body: JSON.stringify(data),
     });
+    
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
       try {
-        const errorData = await response.json();
-        if (errorData && errorData.message) {
-          errorMessage = errorData.message;
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          const errorData = await response.json();
+          errorMessage = errorData?.message || JSON.stringify(errorData);
         } else {
           errorMessage = await response.text();
         }
       } catch (e) {
-        errorMessage = await response.text();
+        errorMessage = `HTTP error! status: ${response.status}`;
       }
       throw new Error(errorMessage);
     }
+    
     return response.json() as Promise<T>;
   },
 
@@ -173,20 +183,23 @@ const http = {
       ...options,
       headers,
     });
+    
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
       try {
-        const errorData = await response.json();
-        if (errorData && errorData.message) {
-          errorMessage = errorData.message;
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          const errorData = await response.json();
+          errorMessage = errorData?.message || JSON.stringify(errorData);
         } else {
           errorMessage = await response.text();
         }
       } catch (e) {
-        errorMessage = await response.text();
+        errorMessage = `HTTP error! status: ${response.status}`;
       }
       throw new Error(errorMessage);
     }
+    
     return response.json() as Promise<T>;
   },
 };

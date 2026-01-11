@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import {
-  DadosResultado,
   PacienteComComissao,
   PacienteComStatus,
 } from "../../types";
@@ -34,16 +33,18 @@ export async function salvarPacientes(
   try {
     const dados = [
       ...pacientesOk.map((p) => ({
+        dataAtendimento: (p as any)["Data Atendimento"],
         nome: p.Paciente,
-        totalProcedimentos: p.somaProcedimentos.toString(),
+        totalProcedimentos: p.procedimentos.length.toString(),
         totalGeral: p["Total Geral"].toString(),
         totalComissao: p.totalComissao.toString(),
         status: "OK" as const,
         diferenca: "0",
       })),
       ...divergentes.map((d) => ({
+        dataAtendimento: (d as any)["Data Atendimento"],
         nome: d.Paciente,
-        totalProcedimentos: d.somaProcedimentos.toString(),
+        totalProcedimentos: d.procedimentos.length.toString(),
         totalGeral: d["Total Geral"].toString(),
         totalComissao: "0",
         status: "DIVERGENTE" as const,
@@ -55,24 +56,6 @@ export async function salvarPacientes(
     console.log(`✓ ${dados.length} pacientes salvos`);
   } catch (erro) {
     console.error("Erro ao salvar pacientes:", erro);
-    throw erro;
-  }
-}
-
-export async function salvarResumo(resumo: DadosResultado["resumo"]) {
-  try {
-    await prisma.resumo.create({
-      data: {
-        totalPacientes: resumo.totalPacientes,
-        pacientesOk: resumo.pacientesOk,
-        pacientesDivergentes: resumo.pacientesDivergentes,
-        somaComissoes: resumo.somaComissoes.toString(),
-        somaDivergencias: resumo.somaDivergencias.toString(),
-      },
-    });
-    console.log("✓ Resumo salvo");
-  } catch (erro) {
-    console.error("Erro ao salvar resumo:", erro);
     throw erro;
   }
 }

@@ -29,6 +29,7 @@ model Paciente {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  dataAtendimento    String
   nome               String
   totalProcedimentos Decimal
   totalGeral         Decimal
@@ -39,17 +40,5 @@ model Paciente {
   @@unique([nome, createdAt])
   @@index([nome])
   @@index([status])
-}
-
-model Resumo {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-
-  totalPacientes       Int
-  pacientesOk          Int
-  pacientesDivergentes Int
-  somaComissoes        Decimal
-  somaDivergencias     Decimal
-
-  @@index([createdAt])
+  @@index([dataAtendimento])
 }

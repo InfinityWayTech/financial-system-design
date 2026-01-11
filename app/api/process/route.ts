@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
         baseSister: arquivoSistema,
         baseFinance: arquivoFinanceira,
       },
-      false
     );
 
     return NextResponse.json({

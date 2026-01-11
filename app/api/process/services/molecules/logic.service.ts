@@ -7,6 +7,7 @@ import {
   PacienteComStatus,
   PacienteComComissao,
 } from "../../types";
+import { prisma } from "@/lib/prisma";
 
 export function converterData(data: string): string {
   if (!data || !data.includes("/")) return data;
@@ -20,19 +21,33 @@ export function unificarPorPaciente(
   const grupos = procedimentos.reduce((acc, item) => {
     const paciente = item.Paciente?.trim() || "Desconhecido";
     if (!acc[paciente]) {
-      acc[paciente] = { procedimentos: [], soma: 0 };
+      acc[paciente] = { procedimentos: [] };
     }
     acc[paciente].procedimentos.push(item);
-    acc[paciente].soma += Number(item["Valor total do item R$"] || 0);
     return acc;
-  }, {} as Record<string, { procedimentos: Procedimento[]; soma: number }>);
+  }, {} as Record<string, { procedimentos: Procedimento[] }>);
 
-  return Object.entries(grupos).map(([Paciente, { procedimentos, soma }]) => ({
+  return Object.entries(grupos).map(([Paciente, { procedimentos }]) => ({
     Paciente,
-    somaProcedimentos: soma,
     procedimentos,
   }));
 }
+
+export async function verificarSeJaEstarNoBanco(
+  sistema: PacienteUnificado[]
+): Promise<boolean> {
+  const dataSistema = sistema[0]?.procedimentos[0]?.["Data Atendimento"];
+
+  const existeSistema = dataSistema
+    ? await prisma.procedimento.findFirst({
+      where: { dataAtendimento: converterData(dataSistema) },
+      select: { id: true },
+    })
+    : null;
+
+  return !!existeSistema;
+}
+
 
 export function mesclarComFinanceira(
   sistema: PacienteUnificado[],
@@ -44,7 +59,7 @@ export function mesclarComFinanceira(
     );
     return {
       ...item,
-      "Total Geral": fin?.["Total Geral"] || item.somaProcedimentos,
+      "Total Geral": fin?.["Total Geral"] ?? 0,
     };
   });
 }
@@ -54,7 +69,7 @@ export function verificarDivergencias(
 ): PacienteComStatus[] {
   return dados.map((item) => {
     const totalGeral = Number(item["Total Geral"] || 0);
-    const totalProc = Number(item.somaProcedimentos || 0);
+    const totalProc = Number(item.procedimentos.reduce((acc, proc) => acc + Number(proc["Valor total do item R$"] || 0), 0) || 0);
     const temDivergencia = totalGeral !== totalProc;
 
     return {

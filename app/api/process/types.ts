@@ -17,14 +17,12 @@ export interface FinanceiroExcel {
   "Total Geral": number;
 }
 
-// Dados normalizados para processamento
 export interface Procedimento extends ProcedimentoExcel {
   comissao?: number;
 }
 
 export interface PacienteUnificado {
   Paciente: string;
-  somaProcedimentos: number;
   procedimentos: Procedimento[];
 }
 

@@ -136,22 +136,13 @@ exports.Prisma.PacienteScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  dataAtendimento: 'dataAtendimento',
   nome: 'nome',
   totalProcedimentos: 'totalProcedimentos',
   totalGeral: 'totalGeral',
   totalComissao: 'totalComissao',
   status: 'status',
   diferenca: 'diferenca'
-};
-
-exports.Prisma.ResumoScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  totalPacientes: 'totalPacientes',
-  pacientesOk: 'pacientesOk',
-  pacientesDivergentes: 'pacientesDivergentes',
-  somaComissoes: 'somaComissoes',
-  somaDivergencias: 'somaDivergencias'
 };
 
 exports.Prisma.SortOrder = {
@@ -167,8 +158,7 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   Procedimento: 'Procedimento',
-  Paciente: 'Paciente',
-  Resumo: 'Resumo'
+  Paciente: 'Paciente'
 };
 
 /**
