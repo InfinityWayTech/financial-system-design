@@ -6,11 +6,11 @@ import {
   CheckCircle,
   AlertTriangle,
 } from "lucide-react";
-import { useDashboard } from "@/app/dashboard/_hooks/useDashboard";
+import { useSummary } from "@/app/dashboard/_hooks/useDashboard";
 
 export function SummaryCards({ month, year }: { month: number; year: number }) {
   
-  const { data, isLoading } = useDashboard(month, year);
+  const { data, isLoading } = useSummary(month, year);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
@@ -54,7 +54,11 @@ export function SummaryCards({ month, year }: { month: number; year: number }) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {data?.totalProcedimentos?.toLocaleString("pt-BR")}
+            R${" "}
+            {data?.totalProcedimentos?.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </div>
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
             Total do período

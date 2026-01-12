@@ -31,3 +31,10 @@ export type DadosResultado = {
     ticketMedio?: number;
     taxaConformidade?: number;
 }
+
+export type OverviewData = DadosResultado & {
+  listDivergentes: BaseData[];
+  listOK: BaseData[];
+  comissoesPorProfissional: { profissional: string; comissao: number }[];
+  formasDePagamento: string[];
+}

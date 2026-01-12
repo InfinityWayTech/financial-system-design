@@ -1,7 +1,8 @@
 "use client";
 import { Suspense } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SummaryCards } from "./_components/summary-cards";
+import OverviewTab from "./_components/tabs/OverviewTab";
 
 const DashboardPage = () => {
   return (
@@ -43,25 +44,25 @@ const DashboardPage = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* <TabsContent value="overview">
-              <OverviewTab data={data} />
-            </TabsContent>
+          <TabsContent value="overview">
+            <OverviewTab month={10} year={2025} />
+          </TabsContent>
 
-            <TabsContent value="professional">
-              <ProfessionalTab data={data} />
-            </TabsContent>
+          {/* <TabsContent value="professional">
+            <ProfessionalTab />
+          </TabsContent>
 
-            <TabsContent value="patient">
-              <PatientTab data={data} />
-            </TabsContent>
+          <TabsContent value="patient">
+            <PatientTab />
+          </TabsContent>
 
-            <TabsContent value="discrepancies">
-              <DiscrepanciesTab data={data} />
-            </TabsContent>
+          <TabsContent value="discrepancies">
+            <DiscrepanciesTab />
+          </TabsContent>
 
-            <TabsContent value="procedures">
-              <ProceduresTab data={data} />
-            </TabsContent> */}
+          <TabsContent value="procedures">
+            <ProceduresTab />
+          </TabsContent> */}
         </Tabs>
       </div>
     </Suspense>

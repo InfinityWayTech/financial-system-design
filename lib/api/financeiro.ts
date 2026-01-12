@@ -1,5 +1,5 @@
 import http from "@/utils/http";
-import { DadosResultado } from "./types/financial";
+import { DadosResultado, OverviewData } from "./types/financial";
 
 export const postProcessar = async (
   formData: FormData
@@ -14,6 +14,16 @@ export const getSummary = async (
 ): Promise<DadosResultado> => {
   const result = await http.get<DadosResultado>(
     `/api/process/?month=${month}&year=${year}`
+  );
+  return result;
+};
+
+export const getOverview = async (
+  month: number,
+  year: number
+): Promise<OverviewData> => {
+  const result = await http.get<OverviewData>(
+    `/api/overview/?month=${month}&year=${year}`
   );
   return result;
 };
