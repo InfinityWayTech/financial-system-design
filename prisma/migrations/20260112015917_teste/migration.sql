@@ -18,6 +18,7 @@ CREATE TABLE "Paciente" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "dataAtendimento" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
     "totalProcedimentos" DECIMAL(65,30) NOT NULL,
     "totalGeral" DECIMAL(65,30) NOT NULL,
@@ -26,19 +27,6 @@ CREATE TABLE "Paciente" (
     "diferenca" DECIMAL(65,30) NOT NULL DEFAULT 0,
 
     CONSTRAINT "Paciente_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Resumo" (
-    "id" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "totalPacientes" INTEGER NOT NULL,
-    "pacientesOk" INTEGER NOT NULL,
-    "pacientesDivergentes" INTEGER NOT NULL,
-    "somaComissoes" DECIMAL(65,30) NOT NULL,
-    "somaDivergencias" DECIMAL(65,30) NOT NULL,
-
-    CONSTRAINT "Resumo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -57,7 +45,7 @@ CREATE INDEX "Paciente_nome_idx" ON "Paciente"("nome");
 CREATE INDEX "Paciente_status_idx" ON "Paciente"("status");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Paciente_nome_createdAt_key" ON "Paciente"("nome", "createdAt");
+CREATE INDEX "Paciente_dataAtendimento_idx" ON "Paciente"("dataAtendimento");
 
 -- CreateIndex
-CREATE INDEX "Resumo_createdAt_idx" ON "Resumo"("createdAt");
+CREATE UNIQUE INDEX "Paciente_nome_createdAt_key" ON "Paciente"("nome", "createdAt");

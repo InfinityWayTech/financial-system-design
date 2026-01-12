@@ -1,24 +1,13 @@
 "use client";
-import Header from "@/components/header";
-import { useDashboard } from "./_hooks/useDashboard";
 import { Suspense } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SummaryCards } from "./_components/summary-cards";
 
 const DashboardPage = () => {
-  // const { data } = useDashboard();
-  const data = {
-    dadosOk: [],
-    divergencias: [],
-  };
-
-  const hasDivergencias = data.divergencias.length > 0;
-
   return (
     <Suspense fallback={<div>Carregando...</div>}>
       <div className="min-h-screen transition-colors container mx-auto px-4 py-6 space-y-6">
-        <SummaryCards month={12} year={2023} />
+        <SummaryCards month={10} year={2025} />
 
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-5 h-auto gap-2">
@@ -45,11 +34,6 @@ const DashboardPage = () => {
               className="data-[state=active]:bg-blue-600 data-[state=active]:text-white relative"
             >
               Divergências
-              {hasDivergencias && (
-                <Badge className="ml-2 h-5 px-1.5 bg-red-500 text-white">
-                  {data.divergencias.length}
-                </Badge>
-              )}
             </TabsTrigger>
             <TabsTrigger
               value="procedures"

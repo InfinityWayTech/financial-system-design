@@ -25,13 +25,9 @@ export type ProcessarPayload = {
 }
 
 export type DadosResultado = {
-  dadosOk: BaseData[];
-  divergencias: BaseData[];
-  resumo: {
-    totalPacientes: number;
-    pacientesOk: number;
-    pacientesDivergentes: number;
-    somaComissoes: number;
-    somaDivergencias: number;
-  };
+    totalComissao?: number;
+    totalPacientes?: number;
+    totalProcedimentos?: number;
+    ticketMedio?: number;
+    taxaConformidade?: number;
 }

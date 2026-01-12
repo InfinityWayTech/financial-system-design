@@ -11,9 +11,9 @@ export const postProcessar = async (
 export const getSummary = async (
   month: number,
   year: number
-): Promise<DadosResultado["resumo"]> => {
+): Promise<DadosResultado> => {
   const result = await http.get<DadosResultado>(
     `/api/process/?month=${month}&year=${year}`
   );
-  return result.resumo;
+  return result;
 };

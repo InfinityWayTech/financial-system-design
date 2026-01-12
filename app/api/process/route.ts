@@ -44,12 +44,9 @@ export async function GET(request: NextRequest) {
   try {
     const month = Number(request.nextUrl.searchParams.get("month"));
     const year = Number(request.nextUrl.searchParams.get("year"));
-    
+
     const summary = await getSummaryService(month, year);
-    return NextResponse.json({
-      sucesso: true,
-      dados: summary,
-    });
+    return NextResponse.json(summary);
   } catch (erro) {
     console.error("Erro ao trazer o resumo:", erro);
     return NextResponse.json(

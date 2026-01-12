@@ -1,7 +1,6 @@
 "use server";
 
 import {
-  DadosResultado,
   FinanceiroExcel,
   Procedimento,
   ProcessarPayload,
@@ -46,7 +45,7 @@ function normalizarBaseFinanceira(
 
 export async function processarDadosService(
   payload: ProcessarPayload
-): Promise<DadosResultado> {
+): Promise<void> {
   try {
     const sistemaWorkbook = XLSX.read(await payload.baseSister?.arrayBuffer(), { type: "buffer" });
     const primeiraSistema = sistemaWorkbook.Sheets[sistemaWorkbook.SheetNames[0]];
@@ -57,7 +56,7 @@ export async function processarDadosService(
     const baseSistema = normalizarBaseSistema(
       XLSX.utils.sheet_to_json(primeiraSistema)
     );
-    
+
     const baseFinanceira = normalizarBaseFinanceira(
       XLSX.utils.sheet_to_json(primeiraFinanceira)
     );
@@ -73,30 +72,13 @@ export async function processarDadosService(
     const { ok, divergentes } = agruparPorStatus(comStatus);
     const comComissoes = calcularComissoes(ok);
 
-    const resultado: DadosResultado = {
-      dadosOk: comComissoes,
-      divergencias: divergentes,
-      resumo: {
-        totalPacientes: comStatus.length,
-        pacientesOk: ok.length,
-        pacientesDivergentes: divergentes.length,
-        somaComissoes: comComissoes.reduce(
-          (acc, p) => acc + (p.totalComissao || 0),
-          0
-        ),
-        somaDivergencias: divergentes.reduce(
-          (acc, p) => acc + Math.abs(p.diferenca || 0),
-          0
-        ),
-      },
-    };
-
     try {
       await Promise.all([
         salvarProcedimentos(comComissoes),
         salvarPacientes(comComissoes, divergentes),
       ]);
-      return resultado;
+
+      return;
     } catch (erro) {
       console.error("Erro ao salvar no banco:", erro);
       throw new Error("Falha ao salvar os dados no banco.");
@@ -117,23 +99,20 @@ export async function getSummaryService(
   ticketMedio: number;
   taxaConformidade: number;
 }> {
-  const startDate = new Date(year, month - 1, 1);
-  const endDate = new Date(year, month, 1);
 
   const procedimentos = await prisma.paciente.findMany({
     where: {
-      createdAt: {
-        gte: startDate,
-        lt: endDate,
+      dataAtendimento: {
+        contains: `${year}-${String(month).padStart(2, "0")}`,
       },
     },
     orderBy: {
-      createdAt: "asc",
+      dataAtendimento: "asc",
     },
   });
-
-  const totalProcedimentos = procedimentos.reduce((acc, s) => acc + (s.totalProcedimentos?.toNumber() || 0), 0);
-  const totalComissao = procedimentos.reduce((acc, s) => acc + (s.totalComissao?.toNumber() || 0), 0);
+  
+  const totalProcedimentos = procedimentos.reduce((acc, s) => acc + (Number(s.totalProcedimentos?.toString() || 0)), 0);
+  const totalComissao = procedimentos.reduce((acc, s) => acc + (Number(s.totalComissao?.toString() || 0)), 0);
   const totalPacientes = procedimentos.length;
   const ticketMedio = totalProcedimentos > 0 ? totalComissao / totalProcedimentos : 0;
   const taxaConformidade = totalPacientes > 0 ? (procedimentos.filter(p => p.status === "OK").length / totalPacientes) * 100 : 0;

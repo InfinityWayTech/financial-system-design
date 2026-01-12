@@ -39,15 +39,3 @@ export interface PacienteComStatus extends PacienteMergeado {
 export interface PacienteComComissao extends PacienteComStatus {
   totalComissao: number;
 }
-
-export interface DadosResultado {
-  dadosOk: PacienteComComissao[];
-  divergencias: PacienteComStatus[];
-  resumo: {
-    totalPacientes: number;
-    pacientesOk: number;
-    pacientesDivergentes: number;
-    somaComissoes: number;
-    somaDivergencias: number;
-  };
-}
