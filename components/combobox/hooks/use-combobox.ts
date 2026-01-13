@@ -66,7 +66,7 @@ export function useCombobox({
     if (!areArraysEqual(selectedOptions, newSelected)) {
       setSelectedOptions(newSelected);
     }
-  }, [value, options, multiple]);
+  }, [value, options, multiple, selectedOptions]);
 
   const filteredOptions = React.useMemo(() => {
     return options.filter((option) =>

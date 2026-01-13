@@ -26,7 +26,7 @@ export default function SearchBar({
       router.push(`?${params.toString()}`);
     }, 400);
     return () => clearTimeout(timeout);
-  }, [query]);
+  }, [query, paramName, router, searchParams]);
 
   return (
     <div className="relative w-full max-w-md">

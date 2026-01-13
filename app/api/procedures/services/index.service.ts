@@ -27,13 +27,11 @@ export async function getProcedures(month: number, year: number) {
   > = {};
 
   let somaValores = 0;
-  let somaComissoes = 0;
 
   for (const proc of procedimentos) {
     const valor = Number(proc.valor || 0);
     const comissao = Number(proc.comissao || 0);
     somaValores += valor;
-    somaComissoes += comissao;
 
     if (!tiposAtendimentoMap[proc.tipo]) {
       tiposAtendimentoMap[proc.tipo] = {

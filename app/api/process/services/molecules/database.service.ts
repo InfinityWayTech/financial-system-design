@@ -34,7 +34,7 @@ export async function salvarPacientes(
   try {
     const dados = [
       ...pacientesOk.map((p) => ({
-        dataAtendimento: (p as any).procedimentos[0]["Data Atendimento"],
+        dataAtendimento: p.procedimentos[0]?.["Data Atendimento"] || "",
         nome: p.Paciente,
         totalProcedimentos: p.procedimentos.length.toString(),
         totalGeral: p["Total Geral"].toString(),
@@ -43,7 +43,7 @@ export async function salvarPacientes(
         diferenca: "0",
       })),
       ...divergentes.map((d) => ({
-        dataAtendimento: (d as any).procedimentos[0]["Data Atendimento"],
+        dataAtendimento: d.procedimentos[0]?.["Data Atendimento"] || "",
         nome: d.Paciente,
         totalProcedimentos: d.procedimentos.length.toString(),
         totalGeral: d["Total Geral"].toString(),
