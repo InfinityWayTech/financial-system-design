@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { Fragment, useState } from "react";
 import { useProfessional } from "../../_hooks/useDashboard";
 import {
   Card,
@@ -61,7 +61,7 @@ const ProfessionalTab = ({ month, year }: { month: number; year: number }) => {
                 </TableHeader>
                 <TableBody>
                   {data?.map((prof, index) => (
-                    <React.Fragment key={prof.profissional}>
+                    <Fragment key={prof.profissional}>
                       <TableRow
                         className={`cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 ${
                           index < 3 ? "bg-blue-50 dark:bg-blue-950/20" : ""
@@ -184,7 +184,7 @@ const ProfessionalTab = ({ month, year }: { month: number; year: number }) => {
                           </TableCell>
                         </TableRow>
                       )}
-                    </React.Fragment>
+                    </Fragment>
                   ))}
                   <TableRow className="bg-slate-100 dark:bg-slate-800 font-bold">
                     <TableCell>TOTAL</TableCell>

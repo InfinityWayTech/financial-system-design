@@ -8,7 +8,8 @@ export type Procedure = {
   comissao?: number;
 };
 
-export type Patient = {
+export type Patients = {
+  id: string;
   dataAtendimento: string;
   nome: string;
   totalProcedimentos: number;
@@ -16,9 +17,12 @@ export type Patient = {
   totalComissao: number;
   status: string;
   diferenca?: number;
-};
+  procedimentos: Procedimento[];
+
+}
 
 export type Procedimento = {
+  id: string;
   dataAtendimento: string;
   paciente: string;
   profissional: string;
@@ -74,6 +78,33 @@ export type ProfessionalData = {
 }[];
 
 export type PatientsListData = {
-  paciente: Patient;
+  id: string;
+  dataAtendimento: string;
+  nome: string;
+  totalProcedimentos: number;
+  totalGeral: number;
+  totalComissao: number;
+  status: string;
+  diferenca?: number;
   procedimentos: Procedimento[];
 }[];
+
+export type DiscrepanciesData = {
+  patients: Patients[];
+  totalDiscrepancies: number;
+  totalValueDiscrepancies: number;
+}
+
+export type ProceduresData = {
+  totalProcedimentos: number;
+  tiposDeAtendimento: string[];
+  valorMedioProcedimento: number;
+  tabelaTiposAtendimento: {
+    tipo: string;
+    quantidade: number;
+    valorTotal: number;
+    valorMedio: number;
+    comissaoTotal: number;
+    comissaoMedia: number;
+  }[];
+};

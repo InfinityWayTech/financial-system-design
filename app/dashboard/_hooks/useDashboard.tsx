@@ -1,5 +1,12 @@
 import { useFetch } from "@/hooks/useFetch";
-import { getOverview, getPatients, getProfessional, getSummary } from "@/lib/api/financeiro";
+import {
+  getOverview,
+  getPatients,
+  getProfessional,
+  getSummary,
+  getDiscrepancies,
+  getProcedures,
+} from "@/lib/api/financeiro";
 import { useMemo } from "react";
 
 export const useSummary = (month: number, year: number) => {
@@ -96,6 +103,56 @@ export const usePatients = (month: number, year: number) => {
 
   return {
     fetchPatients,
+    data,
+    isLoading,
+    error,
+  };
+};
+
+export const useDiscrepancies = (month: number, year: number) => {
+  const fetchOptions = useMemo(
+    () => ({
+      errorMessage: "Erro ao trazer os dados!",
+      auto: true,
+      defaultArgs: [month, year],
+    }),
+    [month, year]
+  );
+
+  const {
+    execute: fetchDiscrepancies,
+    data,
+    isLoading,
+    error,
+  } = useFetch(getDiscrepancies, fetchOptions);
+
+  return {
+    fetchDiscrepancies,
+    data,
+    isLoading,
+    error,
+  };
+};
+
+export const useProcedures = (month: number, year: number) => {
+  const fetchOptions = useMemo(
+    () => ({
+      errorMessage: "Erro ao trazer os dados!",
+      auto: true,
+      defaultArgs: [month, year],
+    }),
+    [month, year]
+  );
+
+  const {
+    execute: fetchProcedures,
+    data,
+    isLoading,
+    error,
+  } = useFetch(getProcedures, fetchOptions);
+
+  return {
+    fetchProcedures,
     data,
     isLoading,
     error,

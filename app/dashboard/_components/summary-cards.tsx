@@ -7,6 +7,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { useSummary } from "@/app/dashboard/_hooks/useDashboard";
+import { Spinner } from "@/components/ui/spinner";
 
 export function SummaryCards({ month, year }: { month: number; year: number }) {
   
@@ -23,11 +24,17 @@ export function SummaryCards({ month, year }: { month: number; year: number }) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-blue-900 dark:text-blue-50">
-            R${" "}
-            {data?.totalComissao?.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {isLoading ? (
+              <Spinner className="h-6 w-6" />
+            ) : (
+              <>
+                R${" "}
+                {data?.totalComissao?.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </>
+            )}
           </div>
           <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
             Base de dados OK
@@ -43,7 +50,13 @@ export function SummaryCards({ month, year }: { month: number; year: number }) {
           <Users className="h-4 w-4 text-slate-600 dark:text-slate-400" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{data?.totalPacientes?.toLocaleString("pt-BR")}</div>
+          <div className="text-2xl font-bold">
+            {isLoading ? (
+              <Spinner className="h-6 w-6" />
+            ) : (
+              data?.totalPacientes?.toLocaleString("pt-BR")
+            )}
+          </div>
         </CardContent>
       </Card>
 
@@ -54,11 +67,17 @@ export function SummaryCards({ month, year }: { month: number; year: number }) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            R${" "}
-            {data?.totalProcedimentos?.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {isLoading ? (
+              <Spinner className="h-6 w-6" />
+            ) : (
+              <>
+                R${" "}
+                {data?.totalProcedimentos?.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </>
+            )}
           </div>
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
             Total do período
@@ -73,11 +92,17 @@ export function SummaryCards({ month, year }: { month: number; year: number }) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            R${" "}
-            {data?.ticketMedio?.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }) || "0,00"}
+            {isLoading ? (
+              <Spinner className="h-6 w-6" />
+            ) : (
+              <>
+                R${" "}
+                {data?.ticketMedio?.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }) || "0,00"}
+              </>
+            )}
           </div>
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
             Por procedimento
@@ -104,10 +129,16 @@ export function SummaryCards({ month, year }: { month: number; year: number }) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {data?.totalPacientes
-              ? ((data?.taxaConformidade ?? 0) * 100).toFixed(1)
-              : "0,0"}
-            %
+            {isLoading ? (
+              <Spinner className="h-6 w-6" />
+            ) : (
+              <>
+                {data?.totalPacientes
+                  ? ((data?.taxaConformidade ?? 0) * 100).toFixed(1)
+                  : "0,0"}
+                %
+              </>
+            )}
           </div>
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
             Dados validados
