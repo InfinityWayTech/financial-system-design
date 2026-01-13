@@ -2,13 +2,13 @@
 
 import { Suspense, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SummaryCards } from "./_components/summary-cards";
-import { DateSelector } from "./_components/date-selector";
-import OverviewTab from "./_components/tabs/overviewTab";
-import ProfessionalTab from "./_components/tabs/professionalTab";
-import PatientTab from "./_components/tabs/patientTab";
-import DiscrepanciesTab from "./_components/tabs/discrepanciesTab";
-import ProceduresTab from "./_components/tabs/proceduresTab";
+import { SummaryCards } from "@/app/dashboard/_components/summary-cards";
+import { DateSelector } from "@/app/dashboard/_components/date-selector";
+import OverviewTab from "@/app/dashboard/_components/tabs/overviewTab";
+import ProfessionalTab from "@/app/dashboard/_components/tabs/professionalTab";
+import PatientTab from "@/app/dashboard/_components/tabs/patientTab";
+import DiscrepanciesTab from "@/app/dashboard/_components/tabs/discrepanciesTab";
+import ProceduresTab from "@/app/dashboard/_components/tabs/proceduresTab";
 
 const DashboardPage = () => {
   const currentDate = new Date();
