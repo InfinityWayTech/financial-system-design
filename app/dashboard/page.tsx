@@ -2,9 +2,13 @@
 import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SummaryCards } from "./_components/summary-cards";
-import OverviewTab from "./_components/tabs/OverviewTab";
+import OverviewTab from "./_components/tabs/overviewTab";
+import ProfessionalTab from "./_components/tabs/professionalTab";
+import PatientTab from "./_components/tabs/patientTab";
 
 const DashboardPage = () => {
+
+  
   return (
     <Suspense fallback={<div>Carregando...</div>}>
       <div className="min-h-screen transition-colors container mx-auto px-4 py-6 space-y-6">
@@ -48,15 +52,15 @@ const DashboardPage = () => {
             <OverviewTab month={10} year={2025} />
           </TabsContent>
 
-          {/* <TabsContent value="professional">
-            <ProfessionalTab />
+          <TabsContent value="professional">
+            <ProfessionalTab month={10} year={2025}/>
           </TabsContent>
 
           <TabsContent value="patient">
-            <PatientTab />
+            <PatientTab month={10} year={2025}/>
           </TabsContent>
 
-          <TabsContent value="discrepancies">
+          {/* <TabsContent value="discrepancies">
             <DiscrepanciesTab />
           </TabsContent>
 

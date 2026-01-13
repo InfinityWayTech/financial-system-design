@@ -36,7 +36,16 @@ export async function getOverview(month: number, year: number) {
     return acc;
   }, [] as { profissional: string; comissao: number }[]);
 
-  const formasDePagamento = procedimentos.map((p) => p.formaPagamento);
+  const formasDePagamento = Object.entries(
+    procedimentos.reduce<{ [key: string]: number }>((acc, p) => {
+      const key = p.formaPagamento || "Indefinido";
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {})
+  ).map(([forma, quantidade]) => ({
+    forma,
+    quantidade,
+  }));
   const listDivergentes = pacientes.filter((p) => p.status === "DIVERGENTE");
   const listOK = pacientes.filter((p) => p.status === "OK");
 
