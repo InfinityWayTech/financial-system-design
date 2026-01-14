@@ -12,7 +12,6 @@ import { useMemo } from "react";
 export const useSummary = (month: number, year: number) => {
   const fetchOptions = useMemo(
     () => ({
-      errorMessage: "Erro ao trazer os dados!",
       auto: true,
       defaultArgs: [month, year],
     }),
@@ -37,7 +36,6 @@ export const useSummary = (month: number, year: number) => {
 export const useOverview = (month: number, year: number) => {
   const fetchOptions = useMemo(
     () => ({
-      errorMessage: "Erro ao trazer os dados!",
       auto: true,
       defaultArgs: [month, year],
     }),
@@ -62,7 +60,6 @@ export const useOverview = (month: number, year: number) => {
 export const useProfessional = (month: number, year: number) => {
   const fetchOptions = useMemo(
     () => ({
-      errorMessage: "Erro ao trazer os dados!",
       auto: true,
       defaultArgs: [month, year],
     }),
@@ -87,7 +84,6 @@ export const useProfessional = (month: number, year: number) => {
 export const usePatients = (month: number, year: number) => {
   const fetchOptions = useMemo(
     () => ({
-      errorMessage: "Erro ao trazer os dados!",
       auto: true,
       defaultArgs: [month, year],
     }),
@@ -112,7 +108,6 @@ export const usePatients = (month: number, year: number) => {
 export const useDiscrepancies = (month: number, year: number) => {
   const fetchOptions = useMemo(
     () => ({
-      errorMessage: "Erro ao trazer os dados!",
       auto: true,
       defaultArgs: [month, year],
     }),
@@ -137,7 +132,6 @@ export const useDiscrepancies = (month: number, year: number) => {
 export const useProcedures = (month: number, year: number) => {
   const fetchOptions = useMemo(
     () => ({
-      errorMessage: "Erro ao trazer os dados!",
       auto: true,
       defaultArgs: [month, year],
     }),
