@@ -92,29 +92,68 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.ProcedimentoScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  dataAtendimento: 'dataAtendimento',
-  paciente: 'paciente',
-  profissional: 'profissional',
-  formaPagamento: 'formaPagamento',
-  valor: 'valor',
-  tipo: 'tipo',
-  comissao: 'comissao'
-};
-
 exports.Prisma.PacienteScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  dataAtendimento: 'dataAtendimento',
+  nome: 'nome'
+};
+
+exports.Prisma.ProfissionalScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   nome: 'nome',
-  totalProcedimentos: 'totalProcedimentos',
-  totalGeral: 'totalGeral',
-  totalComissao: 'totalComissao',
+  tipo: 'tipo',
+  nivel: 'nivel',
+  aluguelFixo: 'aluguelFixo'
+};
+
+exports.Prisma.CommissionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  profissionalId: 'profissionalId',
+  categoria: 'categoria',
+  tipoCalculo: 'tipoCalculo',
+  percentual: 'percentual',
+  valorFixo: 'valorFixo',
+  tabelaProgressiva: 'tabelaProgressiva',
+  ativo: 'ativo'
+};
+
+exports.Prisma.PremiacaoScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  profissionalId: 'profissionalId',
+  tipo: 'tipo',
+  descricao: 'descricao',
+  tabelaFaixas: 'tabelaFaixas',
+  bonusMetaIndividual: 'bonusMetaIndividual',
+  metaIndividual: 'metaIndividual',
+  ativo: 'ativo'
+};
+
+exports.Prisma.ProcedimentoScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  dataAtendimento: 'dataAtendimento',
+  valor: 'valor',
+  tipo: 'tipo',
   status: 'status',
-  diferenca: 'diferenca'
+  profissionalId: 'profissionalId',
+  pacienteId: 'pacienteId'
+};
+
+exports.Prisma.PaymentMethodsScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  dataPagamento: 'dataPagamento',
+  valor: 'valor',
+  formaPagamento: 'formaPagamento',
+  procedimentoId: 'procedimentoId'
 };
 
 exports.Prisma.SortOrder = {
@@ -122,15 +161,72 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.TipoProfissional = exports.$Enums.TipoProfissional = {
+  MEDICO: 'MEDICO',
+  NUTRICIONISTA: 'NUTRICIONISTA',
+  BIOMEDICO: 'BIOMEDICO',
+  PSICOLOGO: 'PSICOLOGO',
+  COMERCIAL: 'COMERCIAL',
+  OUTRO: 'OUTRO'
+};
+
+exports.NivelComercial = exports.$Enums.NivelComercial = {
+  JUNIOR: 'JUNIOR',
+  SENIOR: 'SENIOR'
+};
+
+exports.CategoriaComissao = exports.$Enums.CategoriaComissao = {
+  CONSULTA: 'CONSULTA',
+  PROTOCOLO: 'PROTOCOLO',
+  IMPLANTE: 'IMPLANTE',
+  PROCEDIMENTO: 'PROCEDIMENTO',
+  CALORIMETRIA: 'CALORIMETRIA',
+  OUTRO: 'OUTRO'
+};
+
+exports.TipoCalculo = exports.$Enums.TipoCalculo = {
+  PERCENTUAL: 'PERCENTUAL',
+  VALOR_FIXO: 'VALOR_FIXO',
+  TABELA_PROGRESSIVA: 'TABELA_PROGRESSIVA'
+};
+
+exports.TipoPremiacao = exports.$Enums.TipoPremiacao = {
+  AGENDAMENTO: 'AGENDAMENTO',
+  CONVERSAO_PROTOCOLO: 'CONVERSAO_PROTOCOLO',
+  RECEPCAO: 'RECEPCAO',
+  RENOVACAO: 'RENOVACAO',
+  VENDA_INDICADA: 'VENDA_INDICADA',
+  GESTOR_COMERCIAL: 'GESTOR_COMERCIAL',
+  ATENDIMENTO_SPA: 'ATENDIMENTO_SPA'
+};
 
 exports.Prisma.ModelName = {
+  Paciente: 'Paciente',
+  Profissional: 'Profissional',
+  Commission: 'Commission',
+  Premiacao: 'Premiacao',
   Procedimento: 'Procedimento',
-  Paciente: 'Paciente'
+  PaymentMethods: 'PaymentMethods'
 };
 /**
  * Create the Client
@@ -140,10 +236,10 @@ const config = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Procedimento {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n\n  dataAtendimento String\n  paciente        String\n  profissional    String\n  formaPagamento  String\n  valor           Decimal\n  tipo            String\n  comissao        Decimal @default(0)\n\n  @@index([paciente])\n  @@index([profissional])\n  @@index([dataAtendimento])\n}\n\nmodel Paciente {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  dataAtendimento    String\n  nome               String\n  totalProcedimentos Decimal\n  totalGeral         Decimal\n  totalComissao      Decimal\n  status             String\n  diferenca          Decimal @default(0)\n\n  @@unique([nome, createdAt])\n  @@index([nome])\n  @@index([status])\n  @@index([dataAtendimento])\n}\n"
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Paciente {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  nome          String\n  procedimentos Procedimento[]\n\n  @@unique([nome, createdAt])\n  @@index([nome])\n}\n\nmodel Profissional {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  nome  String\n  tipo  TipoProfissional\n  nivel NivelComercial?\n\n  aluguelFixo Decimal?\n\n  comissoes     Commission[]\n  premiacoes    Premiacao[]\n  procedimentos Procedimento[]\n\n  @@unique([nome])\n  @@index([nome])\n  @@index([tipo])\n}\n\nenum TipoProfissional {\n  MEDICO\n  NUTRICIONISTA\n  BIOMEDICO\n  PSICOLOGO\n  COMERCIAL\n  OUTRO\n}\n\nenum NivelComercial {\n  JUNIOR\n  SENIOR\n}\n\nmodel Commission {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  profissionalId String\n\n  categoria CategoriaComissao\n\n  tipoCalculo TipoCalculo\n\n  percentual        Decimal?\n  valorFixo         Decimal?\n  tabelaProgressiva Json?\n\n  ativo Boolean @default(true)\n\n  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)\n\n  @@index([profissionalId])\n  @@index([categoria])\n  @@index([ativo])\n}\n\nenum CategoriaComissao {\n  CONSULTA\n  PROTOCOLO\n  IMPLANTE\n  PROCEDIMENTO\n  CALORIMETRIA\n  OUTRO\n}\n\nenum TipoCalculo {\n  PERCENTUAL\n  VALOR_FIXO\n  TABELA_PROGRESSIVA\n}\n\nmodel Premiacao {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  profissionalId String\n\n  tipo      TipoPremiacao\n  descricao String\n\n  tabelaFaixas Json?\n\n  bonusMetaIndividual Decimal?\n  metaIndividual      Int?\n\n  ativo Boolean @default(true)\n\n  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)\n\n  @@index([profissionalId])\n  @@index([tipo])\n}\n\nenum TipoPremiacao {\n  AGENDAMENTO\n  CONVERSAO_PROTOCOLO\n  RECEPCAO\n  RENOVACAO\n  VENDA_INDICADA\n  GESTOR_COMERCIAL\n  ATENDIMENTO_SPA\n}\n\nmodel Procedimento {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n\n  dataAtendimento DateTime\n  valor           Decimal\n  tipo            String\n  status          String\n\n  profissionalId String\n  pacienteId     String\n\n  profissional   Profissional     @relation(fields: [profissionalId], references: [id], onDelete: Restrict)\n  paciente       Paciente         @relation(fields: [pacienteId], references: [id], onDelete: Restrict)\n  paymentMethods PaymentMethods[]\n\n  @@index([pacienteId])\n  @@index([profissionalId])\n  @@index([dataAtendimento])\n  @@index([status])\n  @@index([tipo])\n}\n\nmodel PaymentMethods {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  dataPagamento  DateTime\n  valor          Decimal  @default(0)\n  formaPagamento String\n\n  procedimentoId String\n  procedimento   Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)\n\n  @@index([procedimentoId])\n  @@index([dataPagamento])\n  @@index([formaPagamento])\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Procedimento\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dataAtendimento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"paciente\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profissional\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"formaPagamento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"valor\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"tipo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"comissao\",\"kind\":\"scalar\",\"type\":\"Decimal\"}],\"dbName\":null},\"Paciente\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dataAtendimento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"totalProcedimentos\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"totalGeral\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"totalComissao\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"diferenca\",\"kind\":\"scalar\",\"type\":\"Decimal\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Paciente\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"procedimentos\",\"kind\":\"object\",\"type\":\"Procedimento\",\"relationName\":\"PacienteToProcedimento\"}],\"dbName\":null},\"Profissional\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tipo\",\"kind\":\"enum\",\"type\":\"TipoProfissional\"},{\"name\":\"nivel\",\"kind\":\"enum\",\"type\":\"NivelComercial\"},{\"name\":\"aluguelFixo\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"comissoes\",\"kind\":\"object\",\"type\":\"Commission\",\"relationName\":\"CommissionToProfissional\"},{\"name\":\"premiacoes\",\"kind\":\"object\",\"type\":\"Premiacao\",\"relationName\":\"PremiacaoToProfissional\"},{\"name\":\"procedimentos\",\"kind\":\"object\",\"type\":\"Procedimento\",\"relationName\":\"ProcedimentoToProfissional\"}],\"dbName\":null},\"Commission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"profissionalId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"categoria\",\"kind\":\"enum\",\"type\":\"CategoriaComissao\"},{\"name\":\"tipoCalculo\",\"kind\":\"enum\",\"type\":\"TipoCalculo\"},{\"name\":\"percentual\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"valorFixo\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"tabelaProgressiva\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"ativo\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"profissional\",\"kind\":\"object\",\"type\":\"Profissional\",\"relationName\":\"CommissionToProfissional\"}],\"dbName\":null},\"Premiacao\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"profissionalId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tipo\",\"kind\":\"enum\",\"type\":\"TipoPremiacao\"},{\"name\":\"descricao\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tabelaFaixas\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"bonusMetaIndividual\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"metaIndividual\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ativo\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"profissional\",\"kind\":\"object\",\"type\":\"Profissional\",\"relationName\":\"PremiacaoToProfissional\"}],\"dbName\":null},\"Procedimento\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dataAtendimento\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"valor\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"tipo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profissionalId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pacienteId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profissional\",\"kind\":\"object\",\"type\":\"Profissional\",\"relationName\":\"ProcedimentoToProfissional\"},{\"name\":\"paciente\",\"kind\":\"object\",\"type\":\"Paciente\",\"relationName\":\"PacienteToProcedimento\"},{\"name\":\"paymentMethods\",\"kind\":\"object\",\"type\":\"PaymentMethods\",\"relationName\":\"PaymentMethodsToProcedimento\"}],\"dbName\":null},\"PaymentMethods\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dataPagamento\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"valor\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"formaPagamento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"procedimentoId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"procedimento\",\"kind\":\"object\",\"type\":\"Procedimento\",\"relationName\":\"PaymentMethodsToProcedimento\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
   getRuntime: async () => require('./query_compiler_bg.js'),

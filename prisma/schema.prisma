@@ -26,11 +26,9 @@ model Profissional {
 
   nome  String
   tipo  TipoProfissional
-  nivel NivelProfissional?
+  nivel NivelComercial?
 
   aluguelFixo Decimal?
-
-  taxaMaquineta Boolean @default(false)
 
   comissoes     Commission[]
   premiacoes    Premiacao[]
@@ -46,10 +44,11 @@ enum TipoProfissional {
   NUTRICIONISTA
   BIOMEDICO
   PSICOLOGO
+  COMERCIAL
   OUTRO
 }
 
-enum NivelProfissional {
+enum NivelComercial {
   JUNIOR
   SENIOR
 }
@@ -62,15 +61,12 @@ model Commission {
   profissionalId String
 
   categoria CategoriaComissao
-  descricao String
 
   tipoCalculo TipoCalculo
 
-  percentual Decimal?
-  valorFixo  Decimal?
-
-  medicoAssociado  String?
-  condicaoEspecial String?
+  percentual        Decimal?
+  valorFixo         Decimal?
+  tabelaProgressiva Json?
 
   ativo Boolean @default(true)
 
@@ -82,14 +78,10 @@ model Commission {
 }
 
 enum CategoriaComissao {
-  CONSULTA_BASE
-  CONSULTA_NOVA
-  CONSULTA_PROTOCOLO
-  CONSULTA_PARTICULAR
-  PROTOCOLO_INJETAVEL
-  PROTOCOLO_MOUNJARO
-  IMPLANTE_HORMONAL
-  PROCEDIMENTO_ENZIMA
+  CONSULTA
+  PROTOCOLO
+  IMPLANTE
+  PROCEDIMENTO
   CALORIMETRIA
   OUTRO
 }
@@ -164,11 +156,6 @@ model PaymentMethods {
   dataPagamento  DateTime
   valor          Decimal  @default(0)
   formaPagamento String
-
-  taxaOperadora Decimal @default(0)
-  taxaClinica   Decimal @default(0)
-
-  valorLiquido Decimal?
 
   procedimentoId String
   procedimento   Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)

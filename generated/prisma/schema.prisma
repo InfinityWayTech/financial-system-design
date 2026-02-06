@@ -7,38 +7,160 @@ datasource db {
   provider = "postgresql"
 }
 
-model Procedimento {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-
-  dataAtendimento String
-  paciente        String
-  profissional    String
-  formaPagamento  String
-  valor           Decimal
-  tipo            String
-  comissao        Decimal @default(0)
-
-  @@index([paciente])
-  @@index([profissional])
-  @@index([dataAtendimento])
-}
-
 model Paciente {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  dataAtendimento    String
-  nome               String
-  totalProcedimentos Decimal
-  totalGeral         Decimal
-  totalComissao      Decimal
-  status             String
-  diferenca          Decimal @default(0)
+  nome          String
+  procedimentos Procedimento[]
 
   @@unique([nome, createdAt])
   @@index([nome])
-  @@index([status])
+}
+
+model Profissional {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  nome  String
+  tipo  TipoProfissional
+  nivel NivelComercial?
+
+  aluguelFixo Decimal?
+
+  comissoes     Commission[]
+  premiacoes    Premiacao[]
+  procedimentos Procedimento[]
+
+  @@unique([nome])
+  @@index([nome])
+  @@index([tipo])
+}
+
+enum TipoProfissional {
+  MEDICO
+  NUTRICIONISTA
+  BIOMEDICO
+  PSICOLOGO
+  COMERCIAL
+  OUTRO
+}
+
+enum NivelComercial {
+  JUNIOR
+  SENIOR
+}
+
+model Commission {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profissionalId String
+
+  categoria CategoriaComissao
+
+  tipoCalculo TipoCalculo
+
+  percentual        Decimal?
+  valorFixo         Decimal?
+  tabelaProgressiva Json?
+
+  ativo Boolean @default(true)
+
+  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+
+  @@index([profissionalId])
+  @@index([categoria])
+  @@index([ativo])
+}
+
+enum CategoriaComissao {
+  CONSULTA
+  PROTOCOLO
+  IMPLANTE
+  PROCEDIMENTO
+  CALORIMETRIA
+  OUTRO
+}
+
+enum TipoCalculo {
+  PERCENTUAL
+  VALOR_FIXO
+  TABELA_PROGRESSIVA
+}
+
+model Premiacao {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profissionalId String
+
+  tipo      TipoPremiacao
+  descricao String
+
+  tabelaFaixas Json?
+
+  bonusMetaIndividual Decimal?
+  metaIndividual      Int?
+
+  ativo Boolean @default(true)
+
+  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+
+  @@index([profissionalId])
+  @@index([tipo])
+}
+
+enum TipoPremiacao {
+  AGENDAMENTO
+  CONVERSAO_PROTOCOLO
+  RECEPCAO
+  RENOVACAO
+  VENDA_INDICADA
+  GESTOR_COMERCIAL
+  ATENDIMENTO_SPA
+}
+
+model Procedimento {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  dataAtendimento DateTime
+  valor           Decimal
+  tipo            String
+  status          String
+
+  profissionalId String
+  pacienteId     String
+
+  profissional   Profissional     @relation(fields: [profissionalId], references: [id], onDelete: Restrict)
+  paciente       Paciente         @relation(fields: [pacienteId], references: [id], onDelete: Restrict)
+  paymentMethods PaymentMethods[]
+
+  @@index([pacienteId])
+  @@index([profissionalId])
   @@index([dataAtendimento])
+  @@index([status])
+  @@index([tipo])
+}
+
+model PaymentMethods {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dataPagamento  DateTime
+  valor          Decimal  @default(0)
+  formaPagamento String
+
+  procedimentoId String
+  procedimento   Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
+
+  @@index([procedimentoId])
+  @@index([dataPagamento])
+  @@index([formaPagamento])
 }

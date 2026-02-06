@@ -120,29 +120,68 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.ProcedimentoScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  dataAtendimento: 'dataAtendimento',
-  paciente: 'paciente',
-  profissional: 'profissional',
-  formaPagamento: 'formaPagamento',
-  valor: 'valor',
-  tipo: 'tipo',
-  comissao: 'comissao'
-};
-
 exports.Prisma.PacienteScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  dataAtendimento: 'dataAtendimento',
+  nome: 'nome'
+};
+
+exports.Prisma.ProfissionalScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   nome: 'nome',
-  totalProcedimentos: 'totalProcedimentos',
-  totalGeral: 'totalGeral',
-  totalComissao: 'totalComissao',
+  tipo: 'tipo',
+  nivel: 'nivel',
+  aluguelFixo: 'aluguelFixo'
+};
+
+exports.Prisma.CommissionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  profissionalId: 'profissionalId',
+  categoria: 'categoria',
+  tipoCalculo: 'tipoCalculo',
+  percentual: 'percentual',
+  valorFixo: 'valorFixo',
+  tabelaProgressiva: 'tabelaProgressiva',
+  ativo: 'ativo'
+};
+
+exports.Prisma.PremiacaoScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  profissionalId: 'profissionalId',
+  tipo: 'tipo',
+  descricao: 'descricao',
+  tabelaFaixas: 'tabelaFaixas',
+  bonusMetaIndividual: 'bonusMetaIndividual',
+  metaIndividual: 'metaIndividual',
+  ativo: 'ativo'
+};
+
+exports.Prisma.ProcedimentoScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  dataAtendimento: 'dataAtendimento',
+  valor: 'valor',
+  tipo: 'tipo',
   status: 'status',
-  diferenca: 'diferenca'
+  profissionalId: 'profissionalId',
+  pacienteId: 'pacienteId'
+};
+
+exports.Prisma.PaymentMethodsScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  dataPagamento: 'dataPagamento',
+  valor: 'valor',
+  formaPagamento: 'formaPagamento',
+  procedimentoId: 'procedimentoId'
 };
 
 exports.Prisma.SortOrder = {
@@ -150,15 +189,72 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.TipoProfissional = exports.$Enums.TipoProfissional = {
+  MEDICO: 'MEDICO',
+  NUTRICIONISTA: 'NUTRICIONISTA',
+  BIOMEDICO: 'BIOMEDICO',
+  PSICOLOGO: 'PSICOLOGO',
+  COMERCIAL: 'COMERCIAL',
+  OUTRO: 'OUTRO'
+};
+
+exports.NivelComercial = exports.$Enums.NivelComercial = {
+  JUNIOR: 'JUNIOR',
+  SENIOR: 'SENIOR'
+};
+
+exports.CategoriaComissao = exports.$Enums.CategoriaComissao = {
+  CONSULTA: 'CONSULTA',
+  PROTOCOLO: 'PROTOCOLO',
+  IMPLANTE: 'IMPLANTE',
+  PROCEDIMENTO: 'PROCEDIMENTO',
+  CALORIMETRIA: 'CALORIMETRIA',
+  OUTRO: 'OUTRO'
+};
+
+exports.TipoCalculo = exports.$Enums.TipoCalculo = {
+  PERCENTUAL: 'PERCENTUAL',
+  VALOR_FIXO: 'VALOR_FIXO',
+  TABELA_PROGRESSIVA: 'TABELA_PROGRESSIVA'
+};
+
+exports.TipoPremiacao = exports.$Enums.TipoPremiacao = {
+  AGENDAMENTO: 'AGENDAMENTO',
+  CONVERSAO_PROTOCOLO: 'CONVERSAO_PROTOCOLO',
+  RECEPCAO: 'RECEPCAO',
+  RENOVACAO: 'RENOVACAO',
+  VENDA_INDICADA: 'VENDA_INDICADA',
+  GESTOR_COMERCIAL: 'GESTOR_COMERCIAL',
+  ATENDIMENTO_SPA: 'ATENDIMENTO_SPA'
+};
 
 exports.Prisma.ModelName = {
+  Paciente: 'Paciente',
+  Profissional: 'Profissional',
+  Commission: 'Commission',
+  Premiacao: 'Premiacao',
   Procedimento: 'Procedimento',
-  Paciente: 'Paciente'
+  PaymentMethods: 'PaymentMethods'
 };
 
 /**
